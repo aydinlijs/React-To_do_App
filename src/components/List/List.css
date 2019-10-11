@@ -1,0 +1,57 @@
+p {
+  margin: 0px;
+}
+
+.index {
+  width: 5%;
+}
+
+.content {
+  width: 84%;
+}
+
+.listItem {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  padding: 10px 0px;
+  border-bottom: 1px solid #cccccc;
+  min-height: 20px;
+}
+
+.listItem .done {
+  width: 20px;
+  cursor: pointer;
+}
+
+.listItem .delete img {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.listItem:last-child {
+  border: none;
+}
+
+.emptyBox {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  height: 200px;
+}
+
+.emptyBox img {
+  width: 50px;
+  margin-left: 10px;
+}
+/*# sourceMappingURL=List.css.map */

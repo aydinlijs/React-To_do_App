@@ -1,0 +1,22 @@
+#filterButtons {
+    margin: 10px 0px;
+  .items {
+    height: 40px;
+    border: none;
+    border-radius: 4px;
+    outline: 0;
+    color: white;
+    margin-right: 10px;
+    width: 110px;
+    height: 30px;
+    font-size: 16px;
+    background-color: deepskyblue;
+    cursor: pointer;
+    &:hover {
+        background-color: #4587ba;
+    }
+  }
+  .items.active {
+      background-color: #4587ba;
+  }
+}

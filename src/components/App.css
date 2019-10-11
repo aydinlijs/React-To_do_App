@@ -1,0 +1,31 @@
+* {
+    font-family: 'Quicksand', sans-serif;
+}
+.b-container {
+    width: 800px;
+    max-width: 95%;
+    margin: 0 auto;
+}
+#toDoList {
+    margin-top: 10px;
+    border: 1px solid #cccccc;    
+    padding: 0px 20px;
+}
+#AppName {
+    margin-bottom: 10px;
+}
+
+/* flex */
+.flex {
+    display: flex;
+}
+.flex.fldc {
+    flex-direction: column;
+}
+.flex.flc {
+    justify-content: center;
+}
+.flex.flexbw{
+    justify-content: space-between;
+}
+/* flex ends */
