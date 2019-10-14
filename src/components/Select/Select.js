@@ -14,7 +14,7 @@ const Select = props => {
         .then(setLoading(false));
     }
     fetchData();
-  });
+  },[]);
 
   const renderUsers = users.map(item => (
     <option key={item.id} value={item.id}>
