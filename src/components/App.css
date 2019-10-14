@@ -7,12 +7,18 @@
     margin: 0 auto;
 }
 #toDoList {
-    margin-top: 10px;
     border: 1px solid #cccccc;    
-    padding: 0px 20px;
+    float: left;
+    width: 100%;
 }
 #AppName {
     margin-bottom: 10px;
+}
+.padder {
+    padding: 0px 20px;
+}
+.rower {
+    margin: 10px 0px;
 }
 
 /* flex */

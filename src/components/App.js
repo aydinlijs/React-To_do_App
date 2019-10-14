@@ -1,114 +1,127 @@
-import React from 'react';
-import Form from './Form/Form';
-import List from './List/List';
-import Buttons from './Buttons/Buttons';
-import Toast from './Toast/Toast';
-import './App.css';
+import React from "react";
+import Form from "./Form/Form";
+import List from "./List/List";
+import Buttons from "./Buttons/Buttons";
+import Toast from "./Toast/Toast";
+import Select from "./Select/Select";
+import "./App.css";
 
 class App extends React.Component {
-    state = {
-        todos: [
-            {
-                index: 1,
-                todo: "Learn react router",
-                done: true
-            },
-            {
-                index: 2,
-                todo: "Dom render carousel problem",
-                done: false
-            }, {
-                index: 3,
-                todo: "To-do app",
-                done: true
-            }, {
-                index: 4,
-                todo: "Implement redux in a project",
-                done: false
-            }
-        ],
-        filter: 1,
-        toast: false,
-        toastText: "Item successfully added"
-    }
+  state = {
+    todos: [],
+    user: 0,
+    filter: 1,
+    toastText: "",
+    todosLoading: false
+  };
 
-    deleteItem = (index) => {
+  fetchTodos = () => {
+    fetch("https://jsonplaceholder.typicode.com/todos")
+      .then(response => response.json())
+      .then(data => {
         this.setState({
-            ...this.state,
-            todos: this.state.todos.filter(t => t.index !== index),
-            toast: true,
-            toastText: "Item successfully deleted"
-        })
-    }
-    checkItem = (index) => {
-        this.setState({
-            ...this.state,
-            todos: this.state.todos.map(m =>
-                m.index === index
-                    ? { ...m, done: !m.done }
-                    : m),
-            toast: true,
-            toastText: this.state.todos.filter(m => m.index === index)[0].done ? "Added to waiting list" : "Added to done list"
-        })
-    }
+          todos: data,
+          todosLoading: false
+        });
+      });
+  };
 
-    newToDo = (val) => {
-        this.setState({
-            ...this.state,
-            todos: [...this.state.todos, { index: this.state.todos.length > 0 ? Math.max.apply(Math, this.state.todos.map(o => o.index)) + 1 : 1, todo: val, done: false }],
-            toast: true,
-            toastText: "Item successfully added"
-        })
-    }
+  componentDidMount() {
+    this.fetchTodos();
+  }
 
-    setFilter = (val) => {
-        this.setState({
-            ...this.state,
-            filter: val
-        })
-    }
+  deleteItem = index => {
+    this.setState({
+      todos: this.state.todos.filter(t => t.id !== index),
+      toastText: "Todo " + index + " successfully deleted"
+    });
+  };
 
-    renderListComponent = () => {
-        let filteredData = [];
-        switch (this.state.filter) {
-            case 1:
-                filteredData = this.state.todos;
-                break;
-            case 2:
-                filteredData = this.state.todos.filter(t => t.done);
-                break;
-            case 3:
-                filteredData = this.state.todos.filter(t => !t.done);
-                break;
-            default:
-                filteredData = this.state.todos;
-                break;
+  //check and unchecks a single to do 
+  checkItem = index => {
+    this.setState({
+      todos: this.state.todos.map(m =>
+        m.id === index ? { ...m, completed: !m.completed } : m
+      ),
+      toastText: this.state.todos.find(m => m.id === index).completed
+        ? "Todo " + index + " added to waiting list"
+        : "Todo " + index + " added to done list"
+    });
+  };
+
+  newToDo = val => {
+    const newId = Math.max(...this.state.todos.map(o => o.id)) + 1;
+    this.setState({
+      todos: [
+        ...this.state.todos,
+        {
+          id: this.state.todos.length > 0 ? newId : 1,
+          title: val,
+          completed: false,
+          userId: parseInt(this.state.user)
         }
-        return (
-            <List list={filteredData} deleteItem={this.deleteItem} checkItem={this.checkItem} />
-        )
-    }
+      ],
+      toastText: "Item " + newId + " successfully added"
+    });
+  };
 
-    toastOut = () =>{
-        this.setState({
-            ...this.state,
-            toast: false
-        })
-    }
+  setFilter = val => {
+    this.setState({
+      filter: val
+    });
+  };
 
-    render() {
-        return (
-            <div className="b-container">
-                <h2 id="AppName">Bahruz's to do App</h2>
-                <Form addToDo={this.newToDo} />
-                <Buttons activeFilter={this.state.filter} setFilter={this.setFilter} />
-                <div id="toDoList">
-                    {this.renderListComponent()}
-                </div>
-                <Toast toastOut={this.toastOut} toast={this.state.toast} toastText={this.state.toastText}/>
-            </div>
-        )
+  handleSelect = e => {
+    this.setState({
+      user: e.target.value
+    });
+  };
+
+  toastOut = () => {
+    this.setState({
+      toastText: ""
+    });
+  };
+
+  renderListComponent = () => {
+    let filteredData = [];
+    switch (this.state.filter) {
+      case 1:
+        filteredData = this.state.todos;
+        break;
+      case 2:
+        filteredData = this.state.todos.filter(t => t.completed);
+        break;
+      case 3:
+        filteredData = this.state.todos.filter(t => !t.completed);
+        break;
+      default:
+        filteredData = this.state.todos;
+        break;
     }
+    return (
+      <List
+        list={filteredData}
+        user={this.state.user}
+        deleteItem={this.deleteItem}
+        checkItem={this.checkItem}
+        loading={this.state.todosLoading}
+      />
+    );
+  };
+
+  render() {
+    return (
+      <div className="b-container">
+        <h2 id="AppName">Bahruz's to do App</h2>
+        <Form addToDo={this.newToDo} />
+        <Buttons activeFilter={this.state.filter} setFilter={this.setFilter} />
+        <Select selected={this.state.user} changeSelect={this.handleSelect} />
+        <div id="toDoList">{this.renderListComponent()}</div>
+        <Toast toastOut={this.toastOut} toastText={this.state.toastText} />
+      </div>
+    );
+  }
 }
 
 export default App;
